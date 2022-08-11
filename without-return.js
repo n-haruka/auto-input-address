@@ -52,7 +52,7 @@ const autoAddress = async () => {
           formParts.inputPrefecture.value = addresses[AddressIndex].address1;
           formParts.inputCity.value = addresses[AddressIndex].address2;
           formParts.inputAddress1.value = addresses[AddressIndex].address3;
-        })
+        });
       };
     });
   };
