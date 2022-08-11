@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+.form-item {
+  display: block;
+}
+.form-item + .form-item {
+  margin-top: 15px;
+}
+
+.form-head {
+  display: block;
+}
+
+.search-address-button {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.searched-address {
+  display: block;
+}
+.searched-address + .searched-address {
+  margin-top: 10px;
+}

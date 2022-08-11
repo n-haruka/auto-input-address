@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
+</head>
+<body>
+  <h1>サンプル</h1>
+<form name="address_form">
+  <div class="form-item">
+    <label>
+      <span class="form-head">郵便番号</span>
+      <input type="text" name="postal_code" minlength="7" maxlength="8" pattern="\d*" autocomplete="shipping postal-code">
+    </label>
+    <div id="search-address" class="search-address">
+      <button type="button" id="search-address-button" class="search-address-button">郵便番号から住所を検索</button>
+    </div>
+  </div>
+  <label class="form-item">
+    <span class="form-head">都道府県</span>
+    <input type="text" name="prefecture" autocomplete="shipping address-level1">
+  </label>
+  <label class="form-item">
+    <span class="form-head">市区町村</span>
+    <input type="text" name="city" autocomplete="shipping address-level2">
+  </label>
+  <label class="form-item">
+    <span class="form-head">住所</span>
+    <input type="text" name="address1" autocomplete="shipping address-line1">
+  </label>
+  <label class="form-item">
+    <span class="form-head">建物名等</span>
+    <input type="text" name="address2" autocomplete="shipping address-line2">
+  </label>
+</form>
+
+  <script src="without-return.js"></script>
+  <!-- <script src="with-return.js"></script> -->
+</body>
+</html>
