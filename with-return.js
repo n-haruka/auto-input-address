@@ -11,10 +11,7 @@ const formParts = {
 
 const zipcodeApi = 'https://zipcloud.ibsnet.co.jp/api/search';
 
-const fetchApi = async (endpoint) => {
-  const response = await fetch(endpoint);
-  return response.json();
-};
+const fetchApi = async (endpoint) => (await fetch(endpoint)).json();
 
 const autoAddress = async () => {
   const zipcode = formParts.inputZipcode.value;
@@ -24,37 +21,52 @@ const autoAddress = async () => {
     .then(value => {
       const addresses = value.results; // => "返り値"
       const searchedAddressesElement = document.querySelector('.searched-addresses');
+
+      const initSearchedAddresses = () => {
+        if(!(searchedAddressesElement === null)) {
+          searchedAddressesElement.remove();
+        }
+      }
+
+      const setAddress = (addressesIndex) => {
+        formParts.inputPrefecture.value = addresses[addressesIndex].address1;
+        formParts.inputCity.value = addresses[addressesIndex].address2;
+        formParts.inputAddress1.value = addresses[addressesIndex].address3;
+      }
+
       if(addresses.length <= 1) {
-        if(!(searchedAddressesElement === null)) {
-          searchedAddressesElement.remove();
-        }
-        formParts.inputPrefecture.value = addresses[0].address1;
-        formParts.inputCity.value = addresses[0].address2;
-        formParts.inputAddress1.value = addresses[0].address3;
+        initSearchedAddresses();
+        setAddress(0);
       } else {
-        if(!(searchedAddressesElement === null)) {
-          searchedAddressesElement.remove();
+        initSearchedAddresses();
+        let searchedAddresses;
+
+        const createAddressesAriaFactory = () => {
+          searchedAddresses = document.createElement('div');
+          searchedAddresses.classList.add('searched-addresses');
+          formParts.searchAddress.insertBefore(searchedAddresses, formParts.searchAddressButton.nextElementSibling);
+  
+          return (addressIndex, addressChineseCharacters) => {
+            let searchedAddress = document.createElement('button');
+            searchedAddress.type = 'button';
+            searchedAddress.classList.add('searched-address');
+            searchedAddress.dataset.value = addressIndex;
+            searchedAddress.textContent = addressChineseCharacters;
+            searchedAddresses.append(searchedAddress);
+          }
         }
-        let searchedAddresses = document.createElement('div');
-        searchedAddresses.classList.add('searched-addresses');
-        formParts.searchAddress.insertBefore(searchedAddresses, formParts.searchAddressButton.nextElementSibling);
+        const createAddressesAria = createAddressesAriaFactory();
         Object.entries(addresses).forEach( address => {
           const addressIndex = address[0];
           const addressData = address[1];
-          const addressChineseCharacters = `${addressData['address1']} ${addressData['address2']} ${addressData['address3']}`
-          let searchedAddress = document.createElement('button');
-          searchedAddress.type = 'button';
-          searchedAddress.classList.add('searched-address');
-          searchedAddress.dataset.value = addressIndex;
-          searchedAddress.textContent = addressChineseCharacters;
-          searchedAddresses.append(searchedAddress);
+          const addressChineseCharacters = `${addressData['address1']} ${addressData['address2']} ${addressData['address3']}`;
+
+          createAddressesAria(addressIndex, addressChineseCharacters);
         });
         searchedAddresses.addEventListener('click', (event) => {
           const AddressIndex = event.target.dataset.value;
-          formParts.inputPrefecture.value = addresses[AddressIndex].address1;
-          formParts.inputCity.value = addresses[AddressIndex].address2;
-          formParts.inputAddress1.value = addresses[AddressIndex].address3;
-        })
+          setAddress(AddressIndex);
+        });
       };
     });
   };
