@@ -12,28 +12,28 @@ const formParts = {
 const autoAddress = async () => {
   const zipcodeApi = 'https://zipcloud.ibsnet.co.jp/api/search';
   const zipcode = formParts.inputZipcode.value;
-  if(zipcode) {
-  const zipcodeParam = `?zipcode=${zipcode}`;
+  if (zipcode) {
+    const zipcodeParam = `?zipcode=${zipcode}`;
 
-  const response = (await fetch(zipcodeApi + zipcodeParam)).json();
+    const response = (await fetch(zipcodeApi + zipcodeParam)).json();
 
-  response.then(value => {
-    const addresses = value.results; // => "返り値"
-    const searchedAddressesElement = document.querySelector('.searched-addresses');
+    response.then(value => {
+      const addresses = value.results; // => "返り値"
+      const searchedAddressesElement = document.querySelector('.searched-addresses');
 
-    const initSearchedAddresses = () => {
-      if(!(searchedAddressesElement === null)) {
-        searchedAddressesElement.remove();
+      const initSearchedAddresses = () => {
+        if (!(searchedAddressesElement === null)) {
+          searchedAddressesElement.remove();
+        }
       }
-    }
 
-    const setAddress = (addressesIndex) => {
-      formParts.inputPrefecture.value = addresses[addressesIndex].address1;
-      formParts.inputCity.value = addresses[addressesIndex].address2;
-      formParts.inputAddress1.value = addresses[addressesIndex].address3;
-    }
+      const setAddress = (addressesIndex) => {
+        formParts.inputPrefecture.value = addresses[addressesIndex].address1;
+        formParts.inputCity.value = addresses[addressesIndex].address2;
+        formParts.inputAddress1.value = addresses[addressesIndex].address3;
+      }
 
-      if(addresses.length <= 1) {
+      if (addresses.length <= 1) {
         initSearchedAddresses();
         setAddress(0);
       } else {
@@ -44,7 +44,7 @@ const autoAddress = async () => {
           searchedAddresses = document.createElement('div');
           searchedAddresses.classList.add('searched-addresses');
           formParts.searchAddress.insertBefore(searchedAddresses, formParts.searchAddressButton.nextElementSibling);
-  
+
           return (addressIndex, addressChineseCharacters) => {
             let searchedAddress = document.createElement('button');
             searchedAddress.type = 'button';
@@ -55,7 +55,7 @@ const autoAddress = async () => {
           }
         }
         const createAddressesAria = createAddressesAriaFactory();
-        Object.entries(addresses).forEach( address => {
+        Object.entries(addresses).forEach(address => {
           const addressIndex = address[0];
           const addressData = address[1];
           const addressChineseCharacters = `${addressData['address1']} ${addressData['address2']} ${addressData['address3']}`;
