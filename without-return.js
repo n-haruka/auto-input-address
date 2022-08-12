@@ -39,28 +39,23 @@ const autoAddress = async () => {
       } else {
         initSearchedAddresses();
         let searchedAddresses = document.createElement('div');
+        searchedAddresses.classList.add('searched-addresses');
+        formParts.searchAddress.insertBefore(searchedAddresses, formParts.searchAddressButton.nextElementSibling);
 
-        const createAddressesAriaFactory = () => {
-          searchedAddresses = document.createElement('div');
-          searchedAddresses.classList.add('searched-addresses');
-          formParts.searchAddress.insertBefore(searchedAddresses, formParts.searchAddressButton.nextElementSibling);
-
-          return (addressIndex, addressChineseCharacters) => {
-            let searchedAddress = document.createElement('button');
-            searchedAddress.type = 'button';
-            searchedAddress.classList.add('searched-address');
-            searchedAddress.dataset.value = addressIndex;
-            searchedAddress.textContent = addressChineseCharacters;
-            searchedAddresses.append(searchedAddress);
-          }
+        const createAddresses = (addressIndex, addressChineseCharacters) => {
+          let searchedAddress = document.createElement('button');
+          searchedAddress.type = 'button';
+          searchedAddress.classList.add('searched-address');
+          searchedAddress.dataset.value = addressIndex;
+          searchedAddress.textContent = addressChineseCharacters;
+          searchedAddresses.append(searchedAddress);
         }
-        const createAddressesAria = createAddressesAriaFactory();
         Object.entries(addresses).forEach(address => {
           const addressIndex = address[0];
           const addressData = address[1];
           const addressChineseCharacters = `${addressData['address1']} ${addressData['address2']} ${addressData['address3']}`;
 
-          createAddressesAria(addressIndex, addressChineseCharacters);
+          createAddresses(addressIndex, addressChineseCharacters);
         });
         searchedAddresses.addEventListener('click', (event) => {
           const AddressIndex = event.target.dataset.value;
